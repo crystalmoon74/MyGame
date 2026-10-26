@@ -348,7 +348,7 @@ function jsonp(url) {
   });
 }
 // iTunes는 분당 요청 수 제한이 있어서, 찾은 곡은 브라우저에 저장해 두고 요청 사이에 간격을 둔다.
-const CACHE_KEY = "kpopquiz-previews-v1";
+const CACHE_KEY = "kpopquiz-previews-v2";
 const cache = (() => { try { return JSON.parse(localStorage.getItem(CACHE_KEY)) || {}; } catch { return {}; } })();
 const saveCache = () => { try { localStorage.setItem(CACHE_KEY, JSON.stringify(cache)); } catch {} };
 const sleep = ms => new Promise(r => setTimeout(r, ms));
@@ -366,9 +366,11 @@ async function search(url, onWait) {
 async function findPreview(song, onWait) {
   const key = song.artist + "|" + song.title;
   if (key in cache) return cache[key];
-  const titleN = norm(song.title), names = [song.artist, song.en, ...song.alias].map(norm);
+  // 해외 스토어에는 영문 제목(예: 봄날 → Spring Day)으로 올라간 곡이 많아 별칭도 제목 후보로 본다
+  const names = [song.artist, song.en, ...song.alias].map(norm);
+  const titles = [song.title, ...song.alias].map(norm).filter(t => t.length >= 2 && t !== norm(song.artist) && t !== norm(song.en));
   const pick = results => results.find(r => r.previewUrl &&
-      (norm(r.trackName).includes(titleN) || titleN.includes(norm(r.trackName))) &&
+      titles.some(t => norm(r.trackName).includes(t) || (norm(r.trackName).length >= 2 && t.includes(norm(r.trackName)))) &&
       names.some(n => n && (norm(r.artistName).includes(n) || n.includes(norm(r.artistName)))));
   for (const [term, country] of [[`${song.artist} ${song.title}`, "KR"], [`${song.en} ${song.title}`, "KR"], [`${song.en} ${song.title}`, "US"]]) {
     const url = `https://itunes.apple.com/search?media=music&entity=song&limit=15&country=${country}&term=${encodeURIComponent(term)}`;
