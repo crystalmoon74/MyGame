@@ -60,6 +60,8 @@
   .hud { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 16px; }
   .pill { background: rgba(0,0,0,.25); border: 1px solid var(--line); border-radius: 999px; padding: 8px 14px; font-weight: 700; font-size: 14px; }
   .pill b { color: var(--yellow); }
+  .pill { white-space: nowrap; }
+  @media (max-width: 540px) { .hud { gap: 6px; } .pill { font-size: 12px; padding: 6px 10px; } }
 
   /* Record player */
   .stage { display: flex; flex-direction: column; align-items: center; gap: 16px; padding: 8px 0 4px; }
