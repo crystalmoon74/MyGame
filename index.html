@@ -267,7 +267,7 @@ const SONGS = [
   [2004, "SG워너비", "Timeless", "SG Wannabe", ["SG Wannabe", "타임리스"]],
   [2004, "이승기", "내 여자라니까", "Lee Seung Gi"],
   [2005, "버즈", "가시", "Buzz"],
-  [2007, "빅뱅", "거짓말", "BIGBANG", ["BIGBANG"]],
+  [2007, "빅뱅", "거짓말", "BIGBANG", ["BIGBANG", "Lies"]],
   [2007, "원더걸스", "Tell Me", "Wonder Girls", ["텔미"]],
   [2007, "소녀시대", "다시 만난 세계", "Girls' Generation", ["Into the New World"]],
   [2008, "원더걸스", "Nobody", "Wonder Girls", ["노바디"]],
@@ -278,8 +278,8 @@ const SONGS = [
   [2009, "2NE1", "I Don't Care", "2NE1", ["투애니원"]],
   [2009, "브라운아이드걸스", "Abracadabra", "Brown Eyed Girls", ["아브라카다브라"]],
   // 2010년대
-  [2010, "아이유", "좋은 날", "IU", ["IU"]],
-  [2010, "씨엔블루", "외톨이야", "CNBLUE", ["CNBLUE"]],
+  [2010, "아이유", "좋은 날", "IU", ["IU", "Good Day"]],
+  [2010, "씨엔블루", "외톨이야", "CNBLUE", ["CNBLUE", "I'm a Loner"]],
   [2010, "miss A", "Bad Girl Good Girl", "miss A", ["미쓰에이"]],
   [2011, "2NE1", "내가 제일 잘 나가", "2NE1", ["투애니원", "I Am the Best"]],
   [2012, "싸이", "강남스타일", "PSY", ["PSY", "Gangnam Style"]],
@@ -289,25 +289,107 @@ const SONGS = [
   [2013, "크레용팝", "빠빠빠", "Crayon Pop", ["Bar Bar Bar"]],
   [2014, "태양", "눈,코,입", "TAEYANG", ["TAEYANG", "Eyes Nose Lips", "눈코입"]],
   [2014, "EXID", "위아래", "EXID", ["Up & Down"]],
-  [2014, "아이유", "금요일에 만나요", "IU", ["IU"]],
+  [2014, "아이유", "금요일에 만나요", "IU", ["IU", "Friday"]],
   [2015, "빅뱅", "BANG BANG BANG", "BIGBANG", ["BIGBANG", "뱅뱅뱅"]],
-  [2015, "혁오", "위잉위잉", "HYUKOH", ["HYUKOH"]],
-  [2015, "트와이스", "OOH-AHH하게", "TWICE", ["TWICE", "우아하게"]],
+  [2015, "혁오", "위잉위잉", "HYUKOH", ["HYUKOH", "Wi ing Wi ing"]],
+  [2015, "트와이스", "OOH-AHH하게", "TWICE", ["TWICE", "우아하게", "Like OOH-AHH"]],
   [2016, "트와이스", "CHEER UP", "TWICE", ["TWICE", "치얼업"]],
   [2016, "BLACKPINK", "휘파람", "BLACKPINK", ["블랙핑크", "WHISTLE"]],
   [2017, "방탄소년단", "봄날", "BTS", ["BTS", "Spring Day"]],
   [2017, "Red Velvet", "빨간 맛", "Red Velvet", ["레드벨벳", "Red Flavor"]],
-  [2017, "아이유", "밤편지", "IU", ["IU"]],
+  [2017, "아이유", "밤편지", "IU", ["IU", "Through the Night"]],
   [2018, "BLACKPINK", "뚜두뚜두", "BLACKPINK", ["블랙핑크", "DDU-DU DDU-DU"]],
   [2018, "방탄소년단", "FAKE LOVE", "BTS", ["BTS", "페이크러브"]],
   [2018, "마마무", "별이 빛나는 밤", "MAMAMOO", ["MAMAMOO", "Starry Night"]],
   [2019, "방탄소년단", "작은 것들을 위한 시", "BTS", ["BTS", "Boy With Luv"]],
   [2019, "ITZY", "달라달라", "ITZY", ["있지", "DALLA DALLA"]],
-  [2019, "잔나비", "주저하는 연인들을 위해", "JANNABI", ["JANNABI"]],
+  [2019, "잔나비", "주저하는 연인들을 위해", "JANNABI", ["JANNABI", "For Lovers Who Hesitate"]],
   [2020, "방탄소년단", "Dynamite", "BTS", ["BTS", "다이너마이트"]],
   [2020, "BLACKPINK", "How You Like That", "BLACKPINK", ["블랙핑크"]],
   [2020, "싹쓰리", "다시 여기 바닷가", "SSAK3", ["SSAK3"]],
 ].map(([year, artist, title, en, alias = []]) => ({ year, artist, title, en, alias }));
+
+// 미리 찾아 둔 iTunes 곡 ID ("스토어:ID", 0 = iTunes에 미리듣기 없음).
+// 여기 없는 곡(새로 추가한 곡)은 게임 중에 검색해서 찾는다.
+const ITUNES = {
+  "신승훈|미소속에 비친 그대": "US:404496848",
+  "015B|텅 빈 거리에서": "US:1562091024",
+  "서태지와 아이들|난 알아요": 0,
+  "김건모|핑계": 0,
+  "서태지와 아이들|하여가": 0,
+  "듀스|여름 안에서": "US:1804601893",
+  "투투|일과 이분의 일": "US:1823803591",
+  "DJ DOC|머피의 법칙": "US:1619242738",
+  "김건모|잘못된 만남": 0,
+  "패닉|달팽이": "US:1804626510",
+  "룰라|날개 잃은 천사": "US:1494267337",
+  "H.O.T.|캔디": "US:1060455878",
+  "클론|꿍따리 샤바라": 0,
+  "젝스키스|학원별곡": 0,
+  "S.E.S.|I'm Your Girl": "US:1060481744",
+  "박진영|그녀는 예뻤다": 0,
+  "쿨|슬퍼지려 하기 전에": "US:955122575",
+  "핑클|내 남자친구에게": "US:1456211562",
+  "엄정화|포이즌": "US:1700430885",
+  "조성모|To Heaven": "US:1692523913",
+  "god|어머님께": 0,
+  "신화|T.O.P": "US:1060492867",
+  "핑클|영원한 사랑": "US:1456207541",
+  "god|거짓말": 0,
+  "이정현|바꿔": "US:1617083090",
+  "박지윤|성인식": 0,
+  "god|길": 0,
+  "BoA|No.1": "US:1061506229",
+  "휘성|안되나요": 0,
+  "장나라|Sweet Dream": "US:1544234608",
+  "이효리|10 Minutes": "US:1397154168",
+  "세븐|와줘": "US:1695490394",
+  "동방신기|Hug": "US:1077705899",
+  "비|It's Raining": "US:1698696429",
+  "SG워너비|Timeless": "US:1617997270",
+  "이승기|내 여자라니까": 0,
+  "버즈|가시": "US:1454772762",
+  "소녀시대|다시 만난 세계": "US:854886013",
+  "원더걸스|Nobody": "US:1699171680",
+  "빅뱅|하루하루": "US:1346470976",
+  "동방신기|주문": "US:1062469154",
+  "소녀시대|Gee": "US:854911644",
+  "슈퍼주니어|Sorry, Sorry": "US:854890251",
+  "2NE1|I Don't Care": "US:1339060469",
+  "브라운아이드걸스|Abracadabra": "US:1804699150",
+  "miss A|Bad Girl Good Girl": "US:1698478375",
+  "2NE1|내가 제일 잘 나가": "US:1338689927",
+  "싸이|강남스타일": "US:1445144527",
+  "빅뱅|판타스틱 베이비": "US:1337452979",
+  "EXO|으르렁": "US:854908245",
+  "크레용팝|빠빠빠": "US:1515640822",
+  "태양|눈,코,입": "US:1317322831",
+  "EXID|위아래": "US:913346311",
+  "빅뱅|BANG BANG BANG": "US:1313176083",
+  "트와이스|CHEER UP": "US:1555389973",
+  "BLACKPINK|휘파람": "US:1315917629",
+  "방탄소년단|봄날": "US:1627574950",
+  "Red Velvet|빨간 맛": "US:1256504651",
+  "BLACKPINK|뚜두뚜두": "US:1551479993",
+  "방탄소년단|FAKE LOVE": "US:1598730630",
+  "마마무|별이 빛나는 밤": "US:1676209349",
+  "방탄소년단|작은 것들을 위한 시": "US:1599172208",
+  "ITZY|달라달라": "US:1608248898",
+  "싹쓰리|다시 여기 바닷가": 0,
+  "빅뱅|거짓말": "US:1330947216",
+  "원더걸스|Tell Me": "US:1698697000",
+  "아이유|좋은 날": "US:409076748",
+  "씨엔블루|외톨이야": "US:6809655418",
+  "버스커 버스커|벚꽃 엔딩": 0,
+  "아이유|금요일에 만나요": "US:786863008",
+  "혁오|위잉위잉": "US:1450779338",
+  "트와이스|OOH-AHH하게": "US:1555401293",
+  "아이유|밤편지": "US:1219218446",
+  "잔나비|주저하는 연인들을 위해": "US:1456103133",
+  "방탄소년단|Dynamite": "US:1627575419",
+  "BLACKPINK|How You Like That": "US:1533894669",
+};
+const songKey = s => s.artist + "|" + s.title;
 
 const ROUND_SECONDS = 30;
 const $ = id => document.getElementById(id);
@@ -407,17 +489,33 @@ $("modes").addEventListener("click", showBest); showBest();
 $("startBtn").onclick = startGame;
 $("againBtn").onclick = () => { show("setup"); showBest(); };
 
+// ID를 아는 곡은 스토어별로 한 번의 lookup 요청으로 미리듣기를 한꺼번에 받아 온다
+async function lookupPreviews(songs, onWait) {
+  const byCountry = {}, found = {};
+  for (const s of songs) { const [c, id] = ITUNES[songKey(s)].split(":"); (byCountry[c] ||= []).push(id); }
+  for (const [c, ids] of Object.entries(byCountry)) {
+    try {
+      for (const r of await search(`https://itunes.apple.com/lookup?country=${c}&id=${ids.join(",")}`, onWait))
+        if (r.previewUrl) found[r.trackId] = { url: r.previewUrl, art: (r.artworkUrl100 || "").replace("100x100", "300x300"), album: r.collectionName };
+    } catch { /* 실패한 곡은 아래에서 검색으로 다시 찾는다 */ }
+  }
+  return found;
+}
+
 async function startGame() {
-  const pool = shuffle(SONGS.filter(s => state.eras.has(eraOf(s.year))));
+  const pool = shuffle(SONGS.filter(s => state.eras.has(eraOf(s.year)) && ITUNES[songKey(s)] !== 0));
   const want = Math.min(state.count, pool.length);
   show("loading"); $("loadingBar").style.width = "0";
+  $("loadingText").textContent = "노래를 불러오는 중...";
+  const onWait = () => $("loadingText").textContent = "음원 서버가 바빠요, 잠시 기다리는 중... ⏳";
+  const candidates = pool.slice(0, want + 5);
+  const found = await lookupPreviews(candidates.filter(s => ITUNES[songKey(s)]), onWait);
   const picked = [];
-  // 이미 찾아 둔 곡을 먼저 써서 요청 수를 줄인다
-  pool.sort((a, b) => !!cache[b.artist + "|" + b.title] - !!cache[a.artist + "|" + a.title] || Math.random() - .5);
-  for (const song of pool) {
+  for (const song of [...candidates, ...pool.slice(want + 5)]) {
     if (picked.length >= want) break;
     $("loadingText").textContent = `노래를 찾는 중... (${picked.length}/${want})`;
-    const p = await findPreview(song, () => $("loadingText").textContent = "음원 서버가 바빠요, 잠시 기다리는 중... ⏳");
+    const id = ITUNES[songKey(song)];
+    const p = (id && found[id.split(":")[1]]) || await findPreview(song, onWait);
     if (p) { picked.push({ ...song, ...p }); $("loadingBar").style.width = (picked.length / want * 100) + "%"; }
   }
   if (!picked.length) { show("setup"); return toast("노래를 불러오지 못했어요. 인터넷 연결을 확인해 주세요."); }
